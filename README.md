@@ -1,27 +1,54 @@
 # 🌉 CrossChainDApp - A Cross-Chain NFT Burn-and-Mint DApp
 
-## 📌 Introduction | 项目简介
+## 📌 Introduction
 
 CrossChainDApp is a cross-chain NFT solution built using Solidity and Chainlink CCIP.  
 It supports both **Burn-and-Mint** and **Lock-and-Release** models for transferring NFTs across blockchains.
 
-CrossChainDApp 是一个基于 Solidity 与 Chainlink CCIP 的跨链 NFT 应用，  
-支持 **烧毁-重铸（Burn-and-Mint）** 和 **锁定-释放（Lock-and-Release）** 两种跨链转移模式。
 
----
-
-## 🛠 Features | 功能亮点
+## 🛠 Features
 
 - 🔗 Cross-chain NFT transfer via Chainlink CCIP  
 - 🔥 Burn-and-Mint NFT logic  
 - 🔒 Lock-and-Release with wrapped NFTs  
 - 🧪 Hardhat-based testing framework  
-- 🧱 模拟 CCIP 实现跨链通信流程  
-- 🔁 跨链支持 NFT 烧毁再铸造 & 锁定释放  
-- 🪙 支持 Wrapped NFT（封装 NFT）  
-- ✅ 内置测试脚本，支持一键运行
 
----
+## Transaction | 事务
+```text
+【 user's NFT on SourceChain 】
+
+       🔽  lockAndSendNFT
++-------------------------------+
+| SChain: NFTPoolLockAndRelease |
+| - transferFrom(user → this)   |
+| - sendMessage(tokenId, owner) |
++-------------------------------+
+                 |
+                 | Chainlink CCIP
+                 V
++-------------------------------+
+| DChain: NFTPoolBurnAndMint    |
+| - mintTokenWithSpecificId()   |
++-------------------------------+
+
+【 user now has wrapped NFT on DestChain】
+
+       🔽 burnAndMint
++-------------------------------+
+| DChain: NFTPoolBurnAndMint    |
+| - burn wrapped NFT            |
+| - sendMessage(tokenId, owner) |
++-------------------------------+
+                 |
+                 | Chainlink CCIP
+                 V
++-------------------------------+
+| SChain: NFTPoolLockAndRelease |
+| - transfer NFT back to user   |
++-------------------------------+
+
+【 user's NFT back to the SourceChain】
+```
 
 ## 📁 Project Structure | 项目结构
 

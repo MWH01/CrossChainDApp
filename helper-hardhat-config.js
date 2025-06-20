@@ -14,7 +14,7 @@ const networkConfig = {
     }
 
 }
-module.exports ={
+module.exports = {
     developmentChains,
     networkConfig
 }

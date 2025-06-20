@@ -1,6 +1,6 @@
 const { getNamedAccounts } = require("hardhat");
 
-module.exports = async({getNamedAccounts, deployments}) => {
+module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts();
     const { deploy, log } = deployments;
 

@@ -17,22 +17,22 @@ module.exports = {
       default: 0, // Here, the first account is the deployer
     },
   },
-  networks:{
-    sepolia:{
+  networks: {
+    sepolia: {
       url: SEPOLIA_RPC_URL,
       accounts: [PRIVATE_KEY],
       chainId: 11155111,
       blockConfirmation: 6,
-      companionNetworks:{
+      companionNetworks: {
         destChain: "amoy",
       }
     },
-    amoy:{
+    amoy: {
       url: AMOY_RPC_URL,
       accounts: [PRIVATE_KEY],
       chainId: 80002,
       blockConfirmation: 6,
-      companionNetworks:{
+      companionNetworks: {
         destChain: "sepolia",
       }
     }
