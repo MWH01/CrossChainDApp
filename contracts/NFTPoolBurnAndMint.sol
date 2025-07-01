@@ -42,7 +42,7 @@ contract NFTPoolBurnAndMint is CCIPReceiver, OwnerIsCreator {
     //     string text // The text that was received.
     // );
 
-    struct RequestData{
+    struct RequestData {
         uint256 tokenId;
         address newOwner;
     }
@@ -66,7 +66,11 @@ contract NFTPoolBurnAndMint is CCIPReceiver, OwnerIsCreator {
     /// @notice Constructor initializes the contract with the router address.
     /// @param _router The address of the router contract.
     /// @param _link The address of the link contract.
-    constructor(address _router, address _link, address wnftAddr) CCIPReceiver(_router) {
+    constructor(
+        address _router,
+        address _link,
+        address wnftAddr
+    ) CCIPReceiver(_router) {
         wnft = WrappedNFT(wnftAddr);
         s_linkToken = IERC20(_link);
     }
@@ -93,23 +97,23 @@ contract NFTPoolBurnAndMint is CCIPReceiver, OwnerIsCreator {
     }
 
     function burnAndMint(
-        uint256 _tokenId, 
-        address newOwner, 
-        uint64 destChainSelector, 
-        address receiver) public {
-            // verify if the sender is the owner of NFT
-            // comment this because the check is already performed by ERC721
-            // require(wnft.ownerOf(_tokenId) == msg.sender, "you are not the owner of the NFT");
+        uint256 _tokenId,
+        address newOwner,
+        uint64 destChainSelector,
+        address receiver
+    ) public {
+        // verify if the sender is the owner of NFT
+        // comment this because the check is already performed by ERC721
+        // require(wnft.ownerOf(_tokenId) == msg.sender, "you are not the owner of the NFT");
 
-            // transfer NFT to the pool
-            wnft.transferFrom(msg.sender, address(this), _tokenId);
-            // burn the NFT
-            wnft.burn(_tokenId);
-            // send transaction to the destination chain
-            bytes memory payload = abi.encode(_tokenId, newOwner);
-            sendMessagePayLINK(destChainSelector, receiver, payload);
+        // transfer NFT to the pool
+        wnft.transferFrom(msg.sender, address(this), _tokenId);
+        // burn the NFT
+        wnft.burn(_tokenId);
+        // send transaction to the destination chain
+        bytes memory payload = abi.encode(_tokenId, newOwner);
+        sendMessagePayLINK(destChainSelector, receiver, payload);
     }
-
 
     /// @notice Sends data to receiver on the destination chain.
     /// @notice Pay for fees in LINK.
@@ -122,11 +126,7 @@ contract NFTPoolBurnAndMint is CCIPReceiver, OwnerIsCreator {
         uint64 _destinationChainSelector,
         address _receiver,
         bytes memory _payload
-    )
-        internal
-        onlyOwner
-        returns (bytes32 messageId)
-    {
+    ) internal returns (bytes32 messageId) {
         // Create an EVM2AnyMessage struct in memory with necessary information for sending a cross-chain message
         Client.EVM2AnyMessage memory evm2AnyMessage = _buildCCIPMessage(
             _receiver,
@@ -166,11 +166,11 @@ contract NFTPoolBurnAndMint is CCIPReceiver, OwnerIsCreator {
     /// handle a received message
     function _ccipReceive(
         Client.Any2EVMMessage memory any2EvmMessage
-    )
-        internal
-        override
-    {        
-        RequestData memory reqData = abi.decode(any2EvmMessage.data, (RequestData));
+    ) internal override {
+        RequestData memory reqData = abi.decode(
+            any2EvmMessage.data,
+            (RequestData)
+        );
         address newOwner = reqData.newOwner;
         uint256 tokenId = reqData.tokenId;
 
